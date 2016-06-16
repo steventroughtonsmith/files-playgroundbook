@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Version</key>
+	<string>1.0</string>
+	<key>Name</key>
+	<string>Files</string>
+	<key>ContentIdentifier</key>
+	<string>com.highcaffeinecontent.playgroundbook.Files</string>
+	<key>ContentVersion</key>
+	<string>1</string>
+	<key>ImageReference</key>
+	<string>Icon.png</string>
+	<key>DeploymentTarget</key>
+	<string>ios10.0</string>
+	<key>Chapters</key>
+	<array>
+		<string>Files.playgroundchapter</string>
+	</array>
+</dict>
+</plist>
