@@ -113,7 +113,6 @@ class FBFilesTableViewController : UITableViewController, QLPreviewControllerDat
 }
 
 
-let rootView = UIView()
 let tableVC = FBFilesTableViewController(path:"/")
 
 let navVC = UINavigationController(rootViewController: tableVC)
