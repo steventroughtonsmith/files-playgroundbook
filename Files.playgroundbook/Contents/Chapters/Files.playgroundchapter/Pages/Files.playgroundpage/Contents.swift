@@ -18,7 +18,7 @@ class FBFilesTableViewController : UITableViewController, QLPreviewControllerDat
 		
 		do
 		{
-			self.files = try FileManager.default().contentsOfDirectory(atPath: path)
+			self.files = try FileManager.default.contentsOfDirectory(atPath: path)
 		}
 		catch _
 		{
@@ -35,6 +35,7 @@ class FBFilesTableViewController : UITableViewController, QLPreviewControllerDat
 		self.setToolbarItems([flexibleSpace, itemCountBarItem, flexibleSpace], animated: false)
 		
 		self.path = path
+		self.tableView.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -54,17 +55,17 @@ class FBFilesTableViewController : UITableViewController, QLPreviewControllerDat
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		
-		let cell = UITableViewCell()
-		var newPath : NSString = (self.path as NSString).appendingPathComponent(files[indexPath.row])
+		let files = self.files
+		let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+		var newPath : NSString = (self.path as NSString).appendingPathComponent(files[indexPath.row]) as NSString
 		
 		cell.textLabel?.text = newPath.lastPathComponent
 		cell.imageView?.tintColor = UIColor(colorLiteralRed: 0.565, green: 0.773, blue: 0.961, alpha: 1.0)
 		
 		var isDirectory = ObjCBool(false)
-		FileManager.default().fileExists(atPath:newPath as String, isDirectory: &isDirectory)
+		FileManager.default.fileExists(atPath:newPath as String, isDirectory: &isDirectory)
 		
-		if isDirectory
+		if isDirectory.boolValue
 		{
 			cell.imageView?.image = UIImage(named: "Folder")
 		}
@@ -81,13 +82,14 @@ class FBFilesTableViewController : UITableViewController, QLPreviewControllerDat
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let files = self.files
 		var newPath = self.path as NSString
-		newPath = newPath.appendingPathComponent(files[indexPath.row])
+		newPath = newPath.appendingPathComponent(files[indexPath.row]) as NSString
 		
 		var isDirectory = ObjCBool(false)
-		FileManager.default().fileExists(atPath:newPath as String, isDirectory: &isDirectory)
+		FileManager.default.fileExists(atPath:newPath as String, isDirectory: &isDirectory)
 		
-		if isDirectory
+		if isDirectory.boolValue
 		{
 			let tableVC = FBFilesTableViewController(path:newPath as String)
 			self.navigationController?.pushViewController(tableVC, animated: true)
@@ -105,13 +107,13 @@ class FBFilesTableViewController : UITableViewController, QLPreviewControllerDat
 	}
 	
 	func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+		let files = self.files
 		var newPath = self.path as NSString
-		newPath = newPath.appendingPathComponent(files[self.tableView.indexPathForSelectedRow!.row])
+		newPath = newPath.appendingPathComponent(files[self.tableView.indexPathForSelectedRow!.row]) as NSString
 		
-		return URL(fileURLWithPath: newPath as String)
+		return URL(fileURLWithPath: newPath as String) as QLPreviewItem
 	}
 }
-
 
 let tableVC = FBFilesTableViewController(path:"/")
 
@@ -123,6 +125,4 @@ window.rootViewController = navVC
 window.makeKeyAndVisible()
 
 window.autoresizingMask = [.flexibleHeight,.flexibleWidth]
-
 PlaygroundPage.current.liveView = window
-
